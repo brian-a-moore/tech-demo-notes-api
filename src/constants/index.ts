@@ -12,3 +12,10 @@ export enum STATUS_CODE {
   SERVER_ERROR = 500,
   NOT_IMPLEMENTED = 501,
 }
+
+export type DynamoRecord = {
+  PK: string;
+  SK: string;
+  createdAt: number;
+  updatedAt: number;
+};
