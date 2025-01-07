@@ -1,0 +1,24 @@
+service: notes-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  folderService:
+    handler: src/lambdas/folder-service/index.handler
+    package:
+      include:
+        - src/constants/**
+        - src/middlewares/**
+        - src/utils/**
+  noteService:
+    handler: src/lambdas/note-service/index.handler
+    package:
+      include:
+        - src/constants/**
+        - src/middlewares/**
+        - src/utils/**
+
+plugins:
+  - serverless-plugin-typescript
