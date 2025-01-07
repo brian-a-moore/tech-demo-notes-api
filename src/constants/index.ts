@@ -1,3 +1,8 @@
+export enum DB_KEY {
+  FOLDER = "FOLDER",
+  NOTE = "NOTE",
+}
+
 export enum HTTP_METHOD {
   DELETE = "DELETE",
   GET = "GET",
