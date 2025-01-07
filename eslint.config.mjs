@@ -9,4 +9,12 @@ export default [
   { env: { node: true } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
+  prettier,
+  {
+    extends: [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended",
+    ],
+  },
 ];
