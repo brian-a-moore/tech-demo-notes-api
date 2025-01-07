@@ -1,7 +1,11 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { STATUS_CODE } from "../../../constants";
 import { response } from "../../../utils/responseHandler";
+import { Note } from "../db/type";
+import repository from "../repository";
 
 export const createNote = async (event: APIGatewayProxyEvent) => {
-  return response({ status: STATUS_CODE.NOT_IMPLEMENTED });
+  const newNote = event.body as unknown as Note;
+  const noteId = await repository.createNote(newNote);
+
+  return response({ data: { noteId } });
 };

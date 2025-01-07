@@ -1,7 +1,8 @@
 import { APIGatewayProxyResult } from "aws-lambda";
 
 const defaultResponseBodyMap = new Map([
-  [200, { message: "Success" }],
+  [200, {}],
+  [400, { message: "Bad Input" }],
   [404, { message: "Not Found" }],
   [405, { message: "Method Not Allowed" }],
   [501, { message: "Not Implemented" }],

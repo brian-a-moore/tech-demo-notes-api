@@ -1,7 +1,11 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { STATUS_CODE } from "../../../constants";
 import { response } from "../../../utils/responseHandler";
+import { Folder } from "../db/type";
+import repository from "../repository";
 
 export const createFolder = async (event: APIGatewayProxyEvent) => {
-  return response({ status: STATUS_CODE.NOT_IMPLEMENTED });
+  const newFolder = event.body as unknown as Folder;
+  const folderId = await repository.createFolder(newFolder);
+
+  return response({ data: { folderId } });
 };
