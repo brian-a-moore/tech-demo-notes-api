@@ -6,11 +6,11 @@ This is a technical demonstration app designed to show profeciency with AWS Serv
 
 Build an API with the following tools:
 
-- [ ] Create a serverless API application with the following features:
+- [x] Create a serverless API application with the following features:
   - [x] Ability to create, edit, update and delete folders
   - [x] Ability to create, edit update and delete notes
-  - [ ] Ability to add notes to folders
-  - [ ] Ability to move notes between folders
+  - [x] Ability to add notes to folders
+  - [x] Ability to move notes between folders
 - [ ] The application should be deployed with Terraform
 - [x] The application code should be written in Node.JS with Typescript
 - [ ] The API should be managed by AWS API Gateway
