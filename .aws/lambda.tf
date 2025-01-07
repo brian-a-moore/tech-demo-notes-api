@@ -1,9 +1,11 @@
 resource "aws_lambda_function" "folder_service" {
-  function_name = "folder_service"
-  role          = aws_iam_role.lambda_role.arn
-  handler       = "index.handler"
-  runtime       = "nodejs18.x"
-  timeout       = 10
+  function_name    = "folder_service"
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "index.handler"
+  filename         = "./.serverless/folder_service.zip"
+  source_code_hash = filebase64sha256("./.serverless/folder_service.zip")
+  runtime          = "nodejs18.x"
+  timeout          = 10
 
   environment {
     variables = {
@@ -13,11 +15,13 @@ resource "aws_lambda_function" "folder_service" {
 }
 
 resource "aws_lambda_function" "notes_service" {
-  function_name = "notes_service"
-  role          = aws_iam_role.lambda_role.arn
-  handler       = "index.handler"
-  runtime       = "nodejs18.x"
-  timeout       = 10
+  function_name    = "notes_service"
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "index.handler"
+  filename         = "./.serverless/note_service.zip"
+  source_code_hash = filebase64sha256("./.serverless/note_service.zip")
+  runtime          = "nodejs18.x"
+  timeout          = 10
 
   environment {
     variables = {

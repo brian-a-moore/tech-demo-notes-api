@@ -25,6 +25,14 @@ jobs:
         run: |
           npm run lint
 
+      - name: Install Serverless Framework
+        run: |
+          npm install -g serverless
+
+      - name: Package Lambda Functions
+        run: |
+          serverless package
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
