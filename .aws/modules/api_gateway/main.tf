@@ -32,3 +32,7 @@ resource "aws_api_gateway_integration" "this" {
   integration_http_method = "POST"
   uri                     = each.value.integration_uri
 }
+
+output "resource_id" {
+  value = aws_api_gateway_resource.this.id
+}
