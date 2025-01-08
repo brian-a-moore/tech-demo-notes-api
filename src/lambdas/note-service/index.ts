@@ -5,11 +5,11 @@ import jsonBodyParser from '@middy/http-json-body-parser';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { HTTP_METHOD, STATUS_CODE } from '../../constants';
 import { response } from '../../utils/responseHandler';
-import { createNote, deleteNote, getNote, listNotes, updateNote } from './functions';
+import { createNote, deleteNote, getNote, updateNote } from './functions';
 
 const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
-    const { httpMethod, path } = event;
+    const { httpMethod } = event;
 
     switch (httpMethod) {
       case HTTP_METHOD.POST:
@@ -17,11 +17,7 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
       case HTTP_METHOD.DELETE:
         return await deleteNote(event);
       case HTTP_METHOD.GET:
-        if (path.includes('/list')) {
-          return await listNotes(event);
-        } else {
-          return await getNote(event);
-        }
+        return await getNote(event);
       case HTTP_METHOD.PUT:
         return await updateNote(event);
       default:

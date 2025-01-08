@@ -6,10 +6,12 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { HTTP_METHOD, STATUS_CODE } from '../../constants';
 import { response } from '../../utils/responseHandler';
 import { createFolder, deleteFolder, listFolders, updateFolder } from './functions';
+import { getFolder } from './functions/get-folder';
 
 const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
     const { httpMethod } = event;
+    const folderId = event.pathParameters?.folderId;
 
     switch (httpMethod) {
       case HTTP_METHOD.POST:
@@ -17,7 +19,11 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
       case HTTP_METHOD.DELETE:
         return await deleteFolder(event);
       case HTTP_METHOD.GET:
-        return await listFolders();
+        if (folderId) {
+          return await getFolder(event);
+        } else {
+          return await listFolders();
+        }
       case HTTP_METHOD.PUT:
         return await updateFolder(event);
       default:

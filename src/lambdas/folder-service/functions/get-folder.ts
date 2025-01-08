@@ -3,7 +3,7 @@ import { STATUS_CODE } from '../../../constants';
 import { response } from '../../../utils/responseHandler';
 import repository from '../repository';
 
-export const listNotes = async (event: APIGatewayProxyEvent) => {
+export const getFolder = async (event: APIGatewayProxyEvent) => {
   const folderId = event.pathParameters?.folderId;
 
   if (!folderId)
@@ -12,7 +12,7 @@ export const listNotes = async (event: APIGatewayProxyEvent) => {
       data: { message: 'Folder ID is required' },
     });
 
-  const notes = await repository.listNotes(folderId);
+  const notes = await repository.getFolder(folderId);
 
   return response({ data: { notes } });
 };
