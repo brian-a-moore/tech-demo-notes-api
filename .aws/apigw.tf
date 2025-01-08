@@ -18,7 +18,7 @@ resource "aws_apigatewayv2_integration" "integrations" {
   api_id             = aws_apigatewayv2_api.notes_api.id
   integration_type   = "AWS_PROXY"
   integration_uri    = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${each.value.integration_uri}/invocations"
-  integration_method = each.value.method
+  integration_method = "POST"
 }
 
 resource "aws_apigatewayv2_route" "routes" {
