@@ -45,6 +45,10 @@ jobs:
         with:
           terraform_version: 1.7.5
 
+      # debugging step -- keep it commented out
+      - name: Set TF_LOG Environment Variable
+        run: echo "TF_LOG=TRACE" >> $GITHUB_ENV
+
       - name: Terraform Init
         run: |
           export TF_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}
