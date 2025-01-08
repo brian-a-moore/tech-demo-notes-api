@@ -1,5 +1,5 @@
-import { DB_KEY } from "../../../constants";
-import { NoteModel } from "../db/model";
+import { DB_KEY } from '../../../constants';
+import { NoteModel } from '../db/model';
 
 export const deleteNote = async (folderId: string, noteId: string) => {
   await NoteModel.delete({

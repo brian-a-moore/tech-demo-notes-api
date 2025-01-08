@@ -1,7 +1,7 @@
-import crypto from "crypto";
-import { DB_KEY } from "../../../constants";
-import { FolderModel } from "../db/model";
-import { Folder } from "../db/type";
+import crypto from 'crypto';
+import { DB_KEY } from '../../../constants';
+import { FolderModel } from '../db/model';
+import { Folder } from '../db/type';
 
 export const createFolder = async (folder: Folder) => {
   const folderId = crypto.randomUUID();

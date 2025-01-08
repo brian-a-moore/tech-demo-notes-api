@@ -1,5 +1,5 @@
-import { DB_KEY } from "../../../constants";
-import { FolderModel } from "../db/model";
+import { DB_KEY } from '../../../constants';
+import { FolderModel } from '../db/model';
 
 export const deleteFolder = async (folderId: string) => {
   await FolderModel.delete({

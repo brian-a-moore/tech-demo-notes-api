@@ -1,7 +1,7 @@
-import { APIGatewayProxyEvent } from "aws-lambda";
-import { STATUS_CODE } from "../../../constants";
-import { response } from "../../../utils/responseHandler";
-import repository from "../repository";
+import { APIGatewayProxyEvent } from 'aws-lambda';
+import { STATUS_CODE } from '../../../constants';
+import { response } from '../../../utils/responseHandler';
+import repository from '../repository';
 
 export const deleteNote = async (event: APIGatewayProxyEvent) => {
   const folderId = event.pathParameters?.folderId;
@@ -10,7 +10,7 @@ export const deleteNote = async (event: APIGatewayProxyEvent) => {
   if (!folderId || !noteId)
     return response({
       status: STATUS_CODE.BAD_REQUEST,
-      data: { message: "Folder and Note IDs are required" },
+      data: { message: 'Folder and Note IDs are required' },
     });
 
   await repository.deleteNote(folderId, noteId);

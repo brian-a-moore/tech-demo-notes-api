@@ -1,12 +1,10 @@
-import { DB_KEY } from "../../../constants";
-import { FolderModel } from "../db/model";
-import { FolderItem, FolderRecord } from "../db/type";
+import { DB_KEY } from '../../../constants';
+import { FolderModel } from '../db/model';
+import { FolderItem, FolderRecord } from '../db/type';
 
-const transformFoldersToFolderItems = (
-  records: FolderRecord[],
-): FolderItem[] => {
+const transformFoldersToFolderItems = (records: FolderRecord[]): FolderItem[] => {
   return records.map((r) => {
-    const [, folderId] = r.PK.split("#");
+    const [, folderId] = r.PK.split('#');
     return {
       folderId,
       title: r.title,
@@ -15,9 +13,11 @@ const transformFoldersToFolderItems = (
 };
 
 export const listFolders = async (): Promise<FolderItem[]> => {
-  const records = await FolderModel.scan("PK")
-    .beginsWith(`${DB_KEY.FOLDER}#`)
-    .exec();
+  const records = await FolderModel.scan('PK').beginsWith(`${DB_KEY.FOLDER}#`).exec();
+
+  if (!records || records.count === 0) {
+    return [];
+  }
 
   return transformFoldersToFolderItems(records as unknown as FolderRecord[]);
 };

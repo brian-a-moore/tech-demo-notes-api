@@ -1,4 +1,4 @@
-import dynamoose from "dynamoose";
+import dynamoose from 'dynamoose';
 
 const NoteSchema = new dynamoose.Schema(
   {
@@ -19,10 +19,6 @@ const NoteSchema = new dynamoose.Schema(
   },
 );
 
-export const NoteModel = dynamoose.model(
-  process.env.DB_NAME as string,
-  NoteSchema,
-  {
-    create: false,
-  },
-);
+export const NoteModel = dynamoose.model(process.env.DB_NAME as string, NoteSchema, {
+  create: false,
+});

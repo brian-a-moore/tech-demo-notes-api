@@ -1,13 +1,13 @@
 export enum DB_KEY {
-  FOLDER = "FOLDER",
-  NOTE = "NOTE",
+  FOLDER = 'FOLDER',
+  NOTE = 'NOTE',
 }
 
 export enum HTTP_METHOD {
-  DELETE = "DELETE",
-  GET = "GET",
-  POST = "POST",
-  PUT = "PUT",
+  DELETE = 'DELETE',
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
 }
 
 export enum STATUS_CODE {

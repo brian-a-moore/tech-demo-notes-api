@@ -1,7 +1,7 @@
-import crypto from "crypto";
-import { DB_KEY } from "../../../constants";
-import { NoteModel } from "../db/model";
-import { Note } from "../db/type";
+import crypto from 'crypto';
+import { DB_KEY } from '../../../constants';
+import { NoteModel } from '../db/model';
+import { Note } from '../db/type';
 
 export const createNote = async ({ folderId, ...note }: Note) => {
   const noteId = crypto.randomUUID();

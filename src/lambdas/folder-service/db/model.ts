@@ -1,4 +1,4 @@
-import dynamoose from "dynamoose";
+import dynamoose from 'dynamoose';
 
 const FolderSchema = new dynamoose.Schema(
   {
@@ -18,10 +18,6 @@ const FolderSchema = new dynamoose.Schema(
   },
 );
 
-export const FolderModel = dynamoose.model(
-  process.env.DB_NAME as string,
-  FolderSchema,
-  {
-    create: false,
-  },
-);
+export const FolderModel = dynamoose.model(process.env.DB_NAME as string, FolderSchema, {
+  create: false,
+});
