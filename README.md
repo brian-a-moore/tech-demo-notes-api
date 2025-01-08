@@ -27,3 +27,4 @@ Build an API with the following tools:
   - [x] The table should be architected to use a composite key design to show relations between folders and notes
 - [x] The API hould be documented with Swagger
 - [x] Deployment should be handled via GitHub Actions
+- [ ] Each service function and repository function should have associates Jest tests
