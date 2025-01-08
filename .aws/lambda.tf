@@ -2,8 +2,8 @@ resource "aws_lambda_function" "folder_service" {
   function_name    = "folder_service"
   role             = aws_iam_role.lambda_role.arn
   handler          = "index.handler"
-  filename         = "./.serverless/folderService.zip"
-  source_code_hash = filebase64sha256("./.serverless/folderService.zip")
+  filename         = "${path.module}/.serverless/folderService.zip"
+  source_code_hash = filebase64sha256("${path.module}/.serverless/folderService.zip")
   runtime          = "nodejs18.x"
   timeout          = 10
 
@@ -18,8 +18,8 @@ resource "aws_lambda_function" "note_service" {
   function_name    = "note_service"
   role             = aws_iam_role.lambda_role.arn
   handler          = "index.handler"
-  filename         = "./.serverless/noteService.zip"
-  source_code_hash = filebase64sha256("./.serverless/noteService.zip")
+  filename         = "${path.module}/.serverless/noteService.zip"
+  source_code_hash = filebase64sha256("${path.module}/.serverless/noteService.zip")
   runtime          = "nodejs18.x"
   timeout          = 10
 
