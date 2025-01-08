@@ -58,7 +58,6 @@ jobs:
         run: |
           export TF_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}
           export TF_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          export TF_VAR_aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}
           terraform -chdir=./.aws init -backend-config="bucket=notes-api-terraform" -backend-config="key=notes-api.tfstate" -backend-config="region=us-east-1"
 
       - name: Terraform Apply
@@ -66,5 +65,4 @@ jobs:
         run: |
           export TF_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}
           export TF_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          export TF_VAR_aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}
           terraform -chdir=./.aws apply -auto-approve -var-file="endpoints.tfvars"
