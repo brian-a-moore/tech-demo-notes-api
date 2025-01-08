@@ -13,9 +13,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FolderInput"
+              $ref: '#/components/schemas/FolderInput'
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -43,9 +43,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FolderInput"
+              $ref: '#/components/schemas/FolderInput'
       responses:
-        "200":
+        '200':
           description: Successful operation
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
@@ -62,7 +62,7 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Successful operation
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
@@ -73,7 +73,7 @@ paths:
       summary: Get all folders
       operationId: getFolders
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -100,9 +100,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NoteInput"
+              $ref: '#/components/schemas/NoteInput'
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -126,7 +126,7 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Successful operation
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_service_arn}/invocations
@@ -147,9 +147,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NoteInput"
+              $ref: '#/components/schemas/NoteInput'
       responses:
-        "200":
+        '200':
           description: Successful operation
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_put_arn}/invocations
@@ -166,7 +166,7 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -191,7 +191,7 @@ paths:
       summary: List all notes
       operationId: listNotes
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
