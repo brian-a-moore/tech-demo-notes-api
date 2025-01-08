@@ -12,6 +12,7 @@ functions:
         - src/constants/**
         - src/middlewares/**
         - src/utils/**
+        - src/lambdas/folder-service/**
   noteService:
     handler: src/lambdas/note-service/index.handler
     package:
@@ -19,6 +20,7 @@ functions:
         - src/constants/**
         - src/middlewares/**
         - src/utils/**
+        - src/lambdas/note-service/**
 
 plugins:
   - serverless-plugin-typescript
