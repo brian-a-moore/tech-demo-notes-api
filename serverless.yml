@@ -4,6 +4,9 @@ provider:
   name: aws
   runtime: nodejs18.x
 
+package:
+  individually: true
+
 functions:
   folderService:
     handler: src/lambdas/folder-service/index.handler
@@ -12,7 +15,7 @@ functions:
         - src/constants/**
         - src/middlewares/**
         - src/utils/**
-        - src/lambdas/folder-service/**
+
   noteService:
     handler: src/lambdas/note-service/index.handler
     package:
@@ -20,7 +23,6 @@ functions:
         - src/constants/**
         - src/middlewares/**
         - src/utils/**
-        - src/lambdas/note-service/**
 
 plugins:
   - serverless-plugin-typescript
