@@ -32,13 +32,3 @@ resource "aws_api_gateway_integration" "this" {
   integration_http_method = "POST"
   uri                     = each.value.integration_uri
 }
-
-resource "aws_api_gateway_integration" "this" {
-  for_each                = { for method in var.methods : method.http_method => method }
-  rest_api_id             = var.rest_api_id
-  resource_id             = aws_api_gateway_resource.this.id
-  http_method             = each.value.http_method
-  type                    = "AWS_PROXY"
-  integration_http_method = "POST"
-  uri                     = each.value.integration_uri
-}
