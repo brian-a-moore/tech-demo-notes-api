@@ -28,3 +28,19 @@ resource "aws_apigatewayv2_route" "routes" {
   route_key = "${each.value.method} ${each.value.path}"
   target    = "integrations/${aws_apigatewayv2_integration.integrations[each.key].id}"
 }
+
+resource "aws_apigatewayv2_deployment" "deployment" {
+  depends_on = [aws_apigatewayv2_route.routes]
+  api_id     = aws_apigatewayv2_api.notes_api.id
+}
+
+resource "aws_apigatewayv2_stage" "stage" {
+  api_id        = aws_apigatewayv2_api.notes_api.id
+  name          = "prod"
+  deployment_id = aws_apigatewayv2_deployment.deployment.id
+  auto_deploy   = true
+}
+
+output "api_url" {
+  value = aws_apigatewayv2_stage.stage.invoke_url
+}
