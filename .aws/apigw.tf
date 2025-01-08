@@ -39,7 +39,7 @@ resource "aws_api_gateway_rest_api" "notes_api" {
 }
 
 module "folder" {
-  source      = "./modules/api_gateway"
+  source      = "."
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
   parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
   path_part   = "folder"
@@ -68,7 +68,7 @@ module "folder" {
 }
 
 module "folder_id" {
-  source      = "./modules/api_gateway"
+  source      = "."
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
   parent_id   = module.folder.aws_api_gateway_resource.this.id
   path_part   = "{folderId}"
@@ -87,7 +87,7 @@ module "folder_id" {
 }
 
 module "note" {
-  source      = "./modules/api_gateway"
+  source      = "."
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
   parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
   path_part   = "note"
@@ -106,7 +106,7 @@ module "note" {
 }
 
 module "note_id" {
-  source      = "./modules/api_gateway"
+  source      = "."
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
   parent_id   = module.note.aws_api_gateway_resource.this.id
   path_part   = "{noteId}"
@@ -125,7 +125,7 @@ module "note_id" {
 }
 
 module "note_list" {
-  source      = "./modules/api_gateway"
+  source      = "."
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
   parent_id   = module.note.aws_api_gateway_resource.this.id
   path_part   = "list"
