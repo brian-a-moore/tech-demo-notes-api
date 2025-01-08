@@ -54,6 +54,12 @@ resource "aws_apigatewayv2_stage" "stage" {
       responseLength = "$context.responseLength"
     })
   }
+
+  default_route_settings {
+    logging_level            = "INFO"
+    data_trace_enabled       = true
+    detailed_metrics_enabled = true
+  }
 }
 
 resource "aws_cloudwatch_log_group" "apigw_log_group" {
