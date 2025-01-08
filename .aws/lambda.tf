@@ -36,7 +36,7 @@ resource "aws_lambda_permission" "apigw" {
   function_name = aws_lambda_function.folder_service.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "${aws_api_gateway_rest_api.api.execution_arn}/*/*/{proxy+}"
+  source_arn = "${aws_api_gateway_rest_api.notes_api.execution_arn}/*/*/{proxy+}"
 }
 
 resource "aws_lambda_permission" "apigw" {
@@ -45,5 +45,5 @@ resource "aws_lambda_permission" "apigw" {
   function_name = aws_lambda_function.notes_service.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "${aws_api_gateway_rest_api.api.execution_arn}/*/*/{proxy+}"
+  source_arn = "${aws_api_gateway_rest_api.notes_api.execution_arn}/*/*/{proxy+}"
 }
