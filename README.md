@@ -13,7 +13,7 @@ Build an API with the following tools:
   - [x] Ability to move notes between folders
 - [x] The application should be deployed with Terraform
 - [x] The application code should be written in Node.JS with Typescript
-- [x] The API should be managed by AWS API Gateway
+- [x] The API should be managed by AWS API Gateway using an HTTP API (not REST API)
 - [ ] The API should be authorized with AWS Cognito and user pools
 - [x] The application code should be deployed via AWS Lambdas
 - [x] The lambdas should be broken into two services:

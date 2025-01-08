@@ -1,108 +1,31 @@
-resource "aws_api_gateway_rest_api" "notes_api" {
-  name        = "Notes API"
-  description = "API for Folder and Notes Services"
+variable "api_endpoints" {
+  type = map(object({
+    method          = string
+    path            = string
+    integration_uri = string
+  }))
+  default = jsondecode(file("${path.module}/endpoints.json"))["endpoints"]
 }
 
-module "folder" {
-  source      = "./modules/api_gateway"
-  rest_api_id = aws_api_gateway_rest_api.notes_api.id
-  parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
-  path_part   = "folder"
-  methods = [
-    {
-      http_method     = "PUT"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.folder_service.invoke_arn
-    },
-    {
-      http_method     = "DELETE"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.folder_service.invoke_arn
-    },
-    {
-      http_method     = "GET"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.folder_service.invoke_arn
-    },
-    {
-      http_method     = "POST"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.folder_service.invoke_arn
-    }
-  ]
+resource "aws_apigatewayv2_api" "notes_api" {
+  name          = "Notes API"
+  description   = "API for Folder and Notes Services"
+  protocol_type = "HTTP"
 }
 
-module "folder_id" {
-  source      = "./modules/api_gateway"
-  rest_api_id = aws_api_gateway_rest_api.notes_api.id
-  parent_id   = module.folder.aws_api_gateway_resource.this.id
-  path_part   = "{folderId}"
-  methods = [
-    {
-      http_method     = "PUT"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.folder_service.invoke_arn
-    },
-    {
-      http_method     = "DELETE"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.folder_service.invoke_arn
-    }
-  ]
+resource "aws_apigatewayv2_integration" "integrations" {
+  for_each = var.api_endpoints
+
+  api_id             = aws_apigatewayv2_api.notes_api.id
+  integration_type   = "AWS_PROXY"
+  integration_uri    = each.value.integration_uri
+  integration_method = each.value.method
 }
 
-module "note" {
-  source      = "./modules/api_gateway"
-  rest_api_id = aws_api_gateway_rest_api.notes_api.id
-  parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
-  path_part   = "note"
-  methods = [
-    {
-      http_method     = "POST"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.note_service.invoke_arn
-    },
-    {
-      http_method     = "DELETE"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.note_service.invoke_arn
-    }
-  ]
-}
+resource "aws_apigatewayv2_route" "routes" {
+  for_each = var.api_endpoints
 
-module "note_id" {
-  source      = "./modules/api_gateway"
-  rest_api_id = aws_api_gateway_rest_api.notes_api.id
-  parent_id   = module.note.aws_api_gateway_resource.this.id
-  path_part   = "{noteId}"
-  methods = [
-    {
-      http_method     = "GET"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.note_service.invoke_arn
-    },
-    {
-      http_method     = "PUT"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.note_service.invoke_arn
-    }
-  ]
-}
-
-module "note_list" {
-  source      = "./modules/api_gateway"
-  rest_api_id = aws_api_gateway_rest_api.notes_api.id
-  parent_id   = module.note.aws_api_gateway_resource.this.id
-  path_part   = "list"
-  methods = [
-    {
-      http_method     = "GET"
-      authorization   = "NONE"
-      integration_uri = aws_lambda_function.note_service.invoke_arn
-    }
-  ]
-}
-
-output "api_endpoint" {
-  value = aws_api_gateway_rest_api.notes_api.execution_arn
+  api_id    = aws_apigatewayv2_api.notes_api.id
+  route_key = "${each.value.method} ${each.value.path}"
+  target    = "integrations/${aws_apigatewayv2_integration.integrations[each.key].id}"
 }
