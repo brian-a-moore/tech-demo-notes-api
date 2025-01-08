@@ -1,0 +1,137 @@
+openapi: 3.0.0
+info:
+  title: Notes API
+  description: API for a notes application
+  version: 1.0.0
+paths:
+  /folder:
+    put:
+      summary: Create or update a folder
+      operationId: putFolder
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    delete:
+      summary: Delete a folder
+      operationId: deleteFolder
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    get:
+      summary: Get folder details
+      operationId: getFolder
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    post:
+      summary: Create a new folder
+      operationId: postFolder
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+  /folder/{folderId}:
+    put:
+      summary: Update a folder by ID
+      operationId: putFolderById
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    delete:
+      summary: Delete a folder by ID
+      operationId: deleteFolderById
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+  /note:
+    post:
+      summary: Create a new note
+      operationId: postNote
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_service_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    delete:
+      summary: Delete a note
+      operationId: deleteNote
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_service_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+  /note/{noteId}:
+    get:
+      summary: Get note details by ID
+      operationId: getNoteById
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_get_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    put:
+      summary: Update a note by ID
+      operationId: putNoteById
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_put_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+  /note/list:
+    get:
+      summary: List all notes
+      operationId: listNotes
+      responses:
+        "200":
+          description: Successful operation
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_list_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+components:
+  securitySchemes:
+    none:
+      type: http
+      scheme: none
