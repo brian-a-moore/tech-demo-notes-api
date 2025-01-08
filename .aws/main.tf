@@ -14,6 +14,11 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
+variable "aws_account_id" {
+  description = "The AWS account ID"
+  type        = string
+}
+
 terraform {
   backend "s3" {
     bucket = "notes-api-terraform"
