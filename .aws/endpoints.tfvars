@@ -11,7 +11,7 @@ api_endpoints = {
   }
   folder-list = {
     method          = "GET"
-    path            = "/folder/"
+    path            = "/folder"
     integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
   }
   folder-get = {
