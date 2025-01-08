@@ -47,3 +47,13 @@ resource "aws_lambda_permission" "apigw_note_service" {
 
   source_arn = "${aws_apigatewayv2_api.notes_api.execution_arn}/*/*/{proxy+}"
 }
+
+resource "aws_cloudwatch_log_group" "folder_service_log_group" {
+  name              = "/aws/lambda/folder_service"
+  retention_in_days = 14
+}
+
+resource "aws_cloudwatch_log_group" "note_service_log_group" {
+  name              = "/aws/lambda/note_service"
+  retention_in_days = 14
+}
