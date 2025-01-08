@@ -5,9 +5,45 @@ info:
   version: 1.0.0
 paths:
   /folder:
+    post:
+      summary: Create a new folder
+      operationId: postFolder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FolderInput"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folderId:
+                    type: string
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
     put:
-      summary: Create or update a folder
+      summary: Update a folder by ID
       operationId: putFolder
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FolderInput"
       responses:
         "200":
           description: Successful operation
@@ -19,6 +55,12 @@ paths:
     delete:
       summary: Delete a folder
       operationId: deleteFolder
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -28,45 +70,22 @@ paths:
         httpMethod: POST
         type: aws_proxy
     get:
-      summary: Get folder details
-      operationId: getFolder
+      summary: Get all folders
+      operationId: getFolders
       responses:
         "200":
           description: Successful operation
-      x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
-        passthroughBehavior: when_no_match
-        httpMethod: POST
-        type: aws_proxy
-    post:
-      summary: Create a new folder
-      operationId: postFolder
-      responses:
-        "200":
-          description: Successful operation
-      x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
-        passthroughBehavior: when_no_match
-        httpMethod: POST
-        type: aws_proxy
-  /folder/{folderId}:
-    put:
-      summary: Update a folder by ID
-      operationId: putFolderById
-      responses:
-        "200":
-          description: Successful operation
-      x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
-        passthroughBehavior: when_no_match
-        httpMethod: POST
-        type: aws_proxy
-    delete:
-      summary: Delete a folder by ID
-      operationId: deleteFolderById
-      responses:
-        "200":
-          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    folderId:
+                      type: string
+                    title:
+                      type: string
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
         passthroughBehavior: when_no_match
@@ -76,9 +95,22 @@ paths:
     post:
       summary: Create a new note
       operationId: postNote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NoteInput"
       responses:
         "200":
           description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folderId:
+                    type: string
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_service_arn}/invocations
         passthroughBehavior: when_no_match
@@ -87,6 +119,12 @@ paths:
     delete:
       summary: Delete a note
       operationId: deleteNote
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -95,26 +133,56 @@ paths:
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
-  /note/{noteId}:
-    get:
-      summary: Get note details by ID
-      operationId: getNoteById
-      responses:
-        "200":
-          description: Successful operation
-      x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_get_arn}/invocations
-        passthroughBehavior: when_no_match
-        httpMethod: POST
-        type: aws_proxy
     put:
       summary: Update a note by ID
-      operationId: putNoteById
+      operationId: putNote
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NoteInput"
       responses:
         "200":
           description: Successful operation
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_put_arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    get:
+      summary: Get note details by ID
+      operationId: getNoteById
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  noteId:
+                    type: string
+                  folderId:
+                    type: string
+                  title:
+                    type: string
+                  body:
+                    type: string
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_get_arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -125,12 +193,48 @@ paths:
       responses:
         "200":
           description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    noteId:
+                      type: string
+                    folderId:
+                      type: string
+                    title:
+                      type: string
+                    body:
+                      type: string
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{note_list_arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
 components:
+  schemas:
+    FolderInput:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 256
+    NoteInput:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 256
+        folderId:
+          type: string
+        body:
+          type: string
+          minLength: 1
+          maxLength: 8192
   securitySchemes:
     none:
       type: http
