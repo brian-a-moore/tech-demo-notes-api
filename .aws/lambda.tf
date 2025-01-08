@@ -9,7 +9,7 @@ resource "aws_lambda_function" "folder_service" {
 
   environment {
     variables = {
-      DB_NAME = aws_dynamodb_table.notes_api.name
+      DB_NAME = aws_dynamodb_table.notes_api_database.name
     }
   }
 }
@@ -25,7 +25,7 @@ resource "aws_lambda_function" "notes_service" {
 
   environment {
     variables = {
-      DB_NAME = aws_dynamodb_table.notes_api.name
+      DB_NAME = aws_dynamodb_table.notes_api_database.name
     }
   }
 }
@@ -33,7 +33,7 @@ resource "aws_lambda_function" "notes_service" {
 resource "aws_lambda_permission" "apigw" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.folders_api.function_name
+  function_name = aws_lambda_function.folder_service.function_name
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_api_gateway_rest_api.api.execution_arn}/*/*/{proxy+}"
@@ -42,7 +42,7 @@ resource "aws_lambda_permission" "apigw" {
 resource "aws_lambda_permission" "apigw" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.notes_api.function_name
+  function_name = aws_lambda_function.notes_service.function_name
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_api_gateway_rest_api.api.execution_arn}/*/*/{proxy+}"
