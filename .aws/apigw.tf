@@ -17,7 +17,7 @@ resource "aws_apigatewayv2_integration" "integrations" {
 
   api_id             = aws_apigatewayv2_api.notes_api.id
   integration_type   = "AWS_PROXY"
-  integration_uri    = each.value.integration_uri
+  integration_uri    = "${each.value.integration_uri}/invocations"
   integration_method = each.value.method
 }
 
