@@ -4,8 +4,8 @@
   "description": "A notes API application designed to show proficiency in Typescript, AWS, Terraform and GitHub Actions",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint . --ext .ts",
-    "format": "prettier --write ."
+    "lint": "npx eslint . --quiet --fix",
+    "prettier": "npx prettier --config .prettierrc --write ."
   },
   "author": "Brian A. Moore",
   "license": "ISC",
