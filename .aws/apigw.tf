@@ -6,10 +6,6 @@ variable "api_endpoints" {
   }))
 }
 
-locals {
-  api_endpoints = jsondecode(file("${path.module}/endpoints.json"))["endpoints"]
-}
-
 resource "aws_apigatewayv2_api" "notes_api" {
   name          = "Notes API"
   description   = "API for Folder and Notes Services"
@@ -17,7 +13,7 @@ resource "aws_apigatewayv2_api" "notes_api" {
 }
 
 resource "aws_apigatewayv2_integration" "integrations" {
-  for_each = local.api_endpoints
+  for_each = var.api_endpoints
 
   api_id             = aws_apigatewayv2_api.notes_api.id
   integration_type   = "AWS_PROXY"
@@ -26,7 +22,7 @@ resource "aws_apigatewayv2_integration" "integrations" {
 }
 
 resource "aws_apigatewayv2_route" "routes" {
-  for_each = local.api_endpoints
+  for_each = var.api_endpoints
 
   api_id    = aws_apigatewayv2_api.notes_api.id
   route_key = "${each.value.method} ${each.value.path}"

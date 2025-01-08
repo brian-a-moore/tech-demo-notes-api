@@ -33,6 +33,11 @@ jobs:
         run: |
           serverless package
 
+      # DEBUG STEP - keep it commented out
+      - name: List .serverless directory contents
+        run: |
+          ls -la .serverless
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -45,7 +50,7 @@ jobs:
         with:
           terraform_version: 1.7.5
 
-      # debugging step -- keep it commented out
+      # DEBUG STEP - keep it commented out
       - name: Set TF_LOG Environment Variable
         run: echo "TF_LOG=TRACE" >> $GITHUB_ENV
 
