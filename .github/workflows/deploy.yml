@@ -51,8 +51,8 @@ jobs:
           terraform_version: 1.7.5
 
       # DEBUG STEP - keep it commented out
-      - name: Set TF_LOG Environment Variable
-        run: echo "TF_LOG=TRACE" >> $GITHUB_ENV
+      # - name: Set TF_LOG Environment Variable
+      #   run: echo "TF_LOG=TRACE" >> $GITHUB_ENV
 
       - name: Terraform Init
         run: |
