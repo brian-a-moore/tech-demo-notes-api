@@ -35,10 +35,9 @@ resource "aws_apigatewayv2_deployment" "deployment" {
 }
 
 resource "aws_apigatewayv2_stage" "stage" {
-  api_id        = aws_apigatewayv2_api.notes_api.id
-  name          = "prod"
-  deployment_id = aws_apigatewayv2_deployment.deployment.id
-  auto_deploy   = true
+  api_id      = aws_apigatewayv2_api.notes_api.id
+  name        = "prod"
+  auto_deploy = true
 }
 
 output "api_url" {
