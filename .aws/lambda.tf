@@ -14,8 +14,8 @@ resource "aws_lambda_function" "folder_service" {
   }
 }
 
-resource "aws_lambda_function" "notes_service" {
-  function_name    = "notes_service"
+resource "aws_lambda_function" "note_service" {
+  function_name    = "note_service"
   role             = aws_iam_role.lambda_role.arn
   handler          = "index.handler"
   filename         = "./.serverless/note_service.zip"
@@ -39,10 +39,10 @@ resource "aws_lambda_permission" "apigw_folder_service" {
   source_arn = "${aws_api_gateway_rest_api.notes_api.execution_arn}/*/*/{proxy+}"
 }
 
-resource "aws_lambda_permission" "apigw_notes_service" {
+resource "aws_lambda_permission" "apigw_note_service" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.notes_service.function_name
+  function_name = aws_lambda_function.note_service.function_name
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_api_gateway_rest_api.notes_api.execution_arn}/*/*/{proxy+}"

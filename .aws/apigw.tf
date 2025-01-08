@@ -79,12 +79,12 @@ module "note_id" {
     {
       http_method     = "GET"
       authorization   = "NONE"
-      integration_uri = aws_lambda_function.notes_service.invoke_arn
+      integration_uri = aws_lambda_function.note_service.invoke_arn
     },
     {
       http_method     = "PUT"
       authorization   = "NONE"
-      integration_uri = aws_lambda_function.notes_service.invoke_arn
+      integration_uri = aws_lambda_function.note_service.invoke_arn
     }
   ]
 }
@@ -98,7 +98,7 @@ module "note_list" {
     {
       http_method     = "GET"
       authorization   = "NONE"
-      integration_uri = aws_lambda_function.notes_service.invoke_arn
+      integration_uri = aws_lambda_function.note_service.invoke_arn
     }
   ]
 }
