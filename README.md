@@ -25,5 +25,5 @@ Build an API with the following tools:
 - [x] Each service should be packaged with Serverless Framework
 - [x] The folders and notes should be stored in DynamoDB
   - [x] The table should be architected to use a composite key design to show relations between folders and notes
-- [ ] The API hould be documented with Swagger
+- [x] The API hould be documented with Swagger
 - [x] Deployment should be handled via GitHub Actions
