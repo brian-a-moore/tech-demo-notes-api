@@ -88,7 +88,7 @@ resource "aws_api_gateway_resource" "api_resources" {
   for_each    = local.api_endpoints
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
   parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
-  path_part   = each.value.path
+  path_part   = split("/", each.value.path)[length(split("/", each.value.path)) - 1]
 }
 
 resource "aws_api_gateway_method" "api_methods" {
