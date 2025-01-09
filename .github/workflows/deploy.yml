@@ -65,4 +65,4 @@ jobs:
         run: |
           export TF_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}
           export TF_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          terraform -chdir=./.aws apply -auto-approve -var-file="endpoints.tfvars"
+          terraform -chdir=./.aws apply -auto-approve
