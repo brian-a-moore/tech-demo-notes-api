@@ -2,8 +2,8 @@ resource "aws_lambda_function" "notes_api" {
   function_name    = "folder_service"
   role             = aws_iam_role.lambda_role.arn
   handler          = "index.handler"
-  filename         = "${path.module}/../.serverless/notes_api.zip"
-  source_code_hash = filebase64sha256("${path.module}/../.serverless/notes_api.zip")
+  filename         = "${path.module}/../.serverless/notes-api.zip"
+  source_code_hash = filebase64sha256("${path.module}/../.serverless/notes-api.zip")
   runtime          = "nodejs18.x"
   timeout          = 10
 

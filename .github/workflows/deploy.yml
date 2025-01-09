@@ -34,9 +34,9 @@ jobs:
           serverless package
 
       # DEBUG STEP - keep it commented out
-      - name: List .serverless directory contents
-        run: |
-          ls -la .serverless
+      # - name: List .serverless directory contents
+      #   run: |
+      #     ls -la .serverless
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
