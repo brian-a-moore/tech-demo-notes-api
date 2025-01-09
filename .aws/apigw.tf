@@ -1,73 +1,126 @@
-variable "api_endpoints" {
-  type = map(object({
-    method          = string
-    path            = string
-    integration_uri = string
-  }))
+resource "aws_api_gateway_rest_api" "notes_api" {
+  name        = "notes-api"
+  description = "API for Notes Application"
 }
 
-resource "aws_apigatewayv2_api" "notes_api" {
-  name          = "Notes API"
-  description   = "API for Folder and Notes Services"
-  protocol_type = "HTTP"
+resource "aws_api_gateway_resource" "proxy_resource" {
+  rest_api_id = aws_api_gateway_rest_api.notes_api.id
+  parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
+  path_part   = "{proxy+}"
 }
 
-resource "aws_apigatewayv2_integration" "integrations" {
-  for_each = var.api_endpoints
-
-  api_id             = aws_apigatewayv2_api.notes_api.id
-  integration_type   = "AWS_PROXY"
-  integration_uri    = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${each.value.integration_uri}/invocations"
-  integration_method = "POST"
+resource "aws_api_gateway_method" "proxy_method" {
+  rest_api_id   = aws_api_gateway_rest_api.notes_api.id
+  resource_id   = aws_api_gateway_resource.proxy_resource.id
+  http_method   = "ANY"
+  authorization = "NONE"
 }
 
-resource "aws_apigatewayv2_route" "routes" {
-  for_each = var.api_endpoints
+resource "aws_api_gateway_integration" "proxy_integration" {
+  rest_api_id = aws_api_gateway_rest_api.notes_api.id
+  resource_id = aws_api_gateway_resource.proxy_resource.id
+  http_method = aws_api_gateway_method.proxy_method.http_method
 
-  api_id    = aws_apigatewayv2_api.notes_api.id
-  route_key = "${each.value.method} ${each.value.path}"
-  target    = "integrations/${aws_apigatewayv2_integration.integrations[each.key].id}"
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.oriter_api.invoke_arn
 }
 
-resource "aws_apigatewayv2_deployment" "deployment" {
-  depends_on = [aws_apigatewayv2_route.routes]
-  api_id     = aws_apigatewayv2_api.notes_api.id
+resource "aws_api_gateway_deployment" "deployment" {
+  rest_api_id = aws_api_gateway_rest_api.notes_api.id
+  stage_name  = "v1"
+
+  depends_on = [
+    aws_api_gateway_integration.proxy_integration
+  ]
 }
 
-resource "aws_apigatewayv2_stage" "stage" {
-  api_id      = aws_apigatewayv2_api.notes_api.id
-  name        = "prod"
-  auto_deploy = true
-
-  access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.apigw_log_group.arn
-    format = jsonencode({
-      requestId      = "$context.requestId"
-      ip             = "$context.identity.sourceIp"
-      caller         = "$context.identity.caller"
-      user           = "$context.identity.user"
-      requestTime    = "$context.requestTime"
-      httpMethod     = "$context.httpMethod"
-      resourcePath   = "$context.resourcePath"
-      status         = "$context.status"
-      protocol       = "$context.protocol"
-      responseLength = "$context.responseLength"
-    })
+locals {
+  api_endpoints = {
+    folder-create = {
+      method          = "POST"
+      path            = "/folder"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
+    }
+    folder-update = {
+      method          = "PUT"
+      path            = "/folder/{folderId}"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
+    }
+    folder-list = {
+      method          = "GET"
+      path            = "/folder"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
+    }
+    folder-get = {
+      method          = "GET"
+      path            = "/folder/{folderId}"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
+    }
+    folder-delete = {
+      method          = "DELETE"
+      path            = "/folder/{folderId}"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
+    }
+    note-create = {
+      method          = "POST"
+      path            = "/note"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:note_service"
+    }
+    note-update = {
+      method          = "PUT"
+      path            = "/note/{noteId}"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:note_service"
+    }
+    note-get = {
+      method          = "GET"
+      path            = "/note/{noteId}"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:note_service"
+    }
+    note-delete = {
+      method          = "DELETE"
+      path            = "/note/{noteId}"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:note_service"
+    }
   }
-
-  default_route_settings {
-    logging_level            = "INFO"
-    data_trace_enabled       = true
-    detailed_metrics_enabled = true
-  }
 }
 
-resource "aws_cloudwatch_log_group" "apigw_log_group" {
-  name              = "/aws/apigateway/notes_api"
-  retention_in_days = 14
+resource "aws_api_gateway_resource" "api_resources" {
+  for_each    = local.api_endpoints
+  rest_api_id = aws_api_gateway_rest_api.notes_api.id
+  parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
+  path_part   = each.value.path
 }
 
-output "api_url" {
-  value = aws_apigatewayv2_stage.stage.invoke_url
+resource "aws_api_gateway_method" "api_methods" {
+  for_each      = local.api_endpoints
+  rest_api_id   = aws_api_gateway_rest_api.notes_api.id
+  resource_id   = aws_api_gateway_resource.api_resources[each.key].id
+  http_method   = each.value.method
+  authorization = "NONE"
 }
 
+resource "aws_api_gateway_integration" "api_integrations" {
+  for_each    = local.api_endpoints
+  rest_api_id = aws_api_gateway_rest_api.notes_api.id
+  resource_id = aws_api_gateway_resource.api_resources[each.key].id
+  http_method = aws_api_gateway_method.api_methods[each.key].http_method
+
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = each.value.integration_uri
+}
+
+resource "aws_api_gateway_deployment" "api_deployment" {
+  rest_api_id = aws_api_gateway_rest_api.notes_api.id
+
+  depends_on = [
+    aws_api_gateway_integration.api_integrations
+  ]
+}
+
+resource "aws_api_gateway_stage" "api_stage" {
+  stage_name    = "prod"
+  rest_api_id   = aws_api_gateway_rest_api.notes_api.id
+  deployment_id = aws_api_gateway_deployment.api_deployment.id
+}
