@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { STATUS_CODE } from '../../../constants';
+import { DB_KEY, STATUS_CODE } from '../../../constants';
 import { response } from '../../../utils/responseHandler';
-import repository from '../repository';
+import { NoteModel } from '../db/model';
 
 export const deleteNote = async (event: APIGatewayProxyEvent) => {
   const folderId = event.pathParameters?.folderId;
@@ -13,7 +13,10 @@ export const deleteNote = async (event: APIGatewayProxyEvent) => {
       data: { message: 'Folder and Note IDs are required' },
     });
 
-  await repository.deleteNote(folderId, noteId);
+  await NoteModel.delete({
+    PK: `${DB_KEY.NOTE}#${noteId}`,
+    SK: `${DB_KEY.FOLDER}#${folderId}`,
+  });
 
   return response({});
 };

@@ -4,20 +4,12 @@ provider:
   name: aws
   runtime: nodejs18.x
 
-package:
-  individually: true
+# package:
+#   individually: true
 
 functions:
-  folderService:
-    handler: src/lambdas/folder-service/index.handler
-    package:
-      include:
-        - src/constants/**
-        - src/middlewares/**
-        - src/utils/**
-
-  noteService:
-    handler: src/lambdas/note-service/index.handler
+  notes_api:
+    handler: src/lambdas/api/index.handler
     package:
       include:
         - src/constants/**

@@ -1,12 +1,13 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { ZodError } from 'zod';
-import { STATUS_CODE } from '../../../constants';
+import { DB_KEY, STATUS_CODE } from '../../../constants';
 import { response } from '../../../utils/responseHandler';
+import { NoteModel } from '../db/model';
 import { NoteSchema } from '../db/schema';
 import { Note } from '../db/type';
-import repository from '../repository';
 
 export const updateNote = async (event: APIGatewayProxyEvent) => {
+  const folderId = event.pathParameters?.folderId;
   const noteId = event.pathParameters?.noteId;
   const update = event.body as unknown as Partial<Note>;
 
@@ -26,7 +27,13 @@ export const updateNote = async (event: APIGatewayProxyEvent) => {
     });
   }
 
-  await repository.updateNote(noteId, update);
+  await NoteModel.update(
+    {
+      PK: `${DB_KEY.NOTE}${noteId}`,
+      SK: `${DB_KEY.FOLDER}${folderId}`,
+    },
+    update,
+  );
 
   return response({});
 };

@@ -1,10 +1,10 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { ZodError } from 'zod';
-import { STATUS_CODE } from '../../../constants';
+import { DB_KEY, STATUS_CODE } from '../../../constants';
 import { response } from '../../../utils/responseHandler';
+import { FolderModel } from '../db/model';
 import { FolderSchema } from '../db/schema';
 import { Folder } from '../db/type';
-import repository from '../repository';
 
 export const updateFolder = async (event: APIGatewayProxyEvent) => {
   const folderId = event.pathParameters?.folderId;
@@ -26,7 +26,13 @@ export const updateFolder = async (event: APIGatewayProxyEvent) => {
     });
   }
 
-  await repository.updateFolder(folderId, update);
+  await FolderModel.update(
+    {
+      PK: `${DB_KEY.FOLDER}${folderId}`,
+      SK: `${DB_KEY.FOLDER}${folderId}`,
+    },
+    update,
+  );
 
   return response({});
 };

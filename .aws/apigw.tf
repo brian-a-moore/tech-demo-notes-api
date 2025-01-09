@@ -39,47 +39,47 @@ locals {
     folder-create = {
       method          = "POST"
       path            = "/folder"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
     }
     folder-update = {
       method          = "PUT"
       path            = "/folder/{folderId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
     }
     folder-list = {
       method          = "GET"
       path            = "/folder"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
     }
     folder-get = {
       method          = "GET"
       path            = "/folder/{folderId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
     }
     folder-delete = {
       method          = "DELETE"
       path            = "/folder/{folderId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:folder_service"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
     }
     note-create = {
       method          = "POST"
       path            = "/note"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:note_service"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
     }
     note-update = {
       method          = "PUT"
       path            = "/note/{noteId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:note_service"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
     }
     note-get = {
       method          = "GET"
       path            = "/note/{noteId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:note_service"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
     }
     note-delete = {
       method          = "DELETE"
       path            = "/note/{noteId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:note_service"
+      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
     }
   }
 }
