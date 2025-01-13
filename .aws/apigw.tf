@@ -70,6 +70,10 @@ resource "aws_api_gateway_method" "folder_methods" {
   http_method   = each.value.method
   authorization = "NONE"
 
+  lifecycle {
+    ignore_changes = [http_method]
+  }
+
   depends_on = [aws_api_gateway_resource.resources]
 }
 
@@ -80,6 +84,10 @@ resource "aws_api_gateway_method" "note_methods" {
   resource_id   = aws_api_gateway_resource.resources["note"].id
   http_method   = each.value.method
   authorization = "NONE"
+
+  lifecycle {
+    ignore_changes = [http_method]
+  }
 
   depends_on = [aws_api_gateway_resource.resources]
 }
