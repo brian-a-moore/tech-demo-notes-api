@@ -57,7 +57,7 @@ resource "aws_api_gateway_resource" "resources" {
 
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
   parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
-  path_part   = "{proxy+}"
+  path_part   = trim(each.value, "/")
 
   depends_on = [aws_lambda_function.notes_api]
 }
@@ -70,10 +70,6 @@ resource "aws_api_gateway_method" "folder_methods" {
   http_method   = each.value.method
   authorization = "NONE"
 
-  lifecycle {
-    ignore_changes = [http_method]
-  }
-
   depends_on = [aws_api_gateway_resource.resources]
 }
 
@@ -84,10 +80,6 @@ resource "aws_api_gateway_method" "note_methods" {
   resource_id   = aws_api_gateway_resource.resources["note"].id
   http_method   = each.value.method
   authorization = "NONE"
-
-  lifecycle {
-    ignore_changes = [http_method]
-  }
 
   depends_on = [aws_api_gateway_resource.resources]
 }
@@ -102,10 +94,6 @@ resource "aws_api_gateway_integration" "folder_integrations" {
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.notes_api.invoke_arn
 
-  lifecycle {
-    ignore_changes = [http_method]
-  }
-
   depends_on = [aws_api_gateway_method.folder_methods]
 }
 
@@ -118,10 +106,6 @@ resource "aws_api_gateway_integration" "note_integrations" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.notes_api.invoke_arn
-
-  lifecycle {
-    ignore_changes = [http_method]
-  }
 
   depends_on = [aws_api_gateway_method.note_methods]
 }
