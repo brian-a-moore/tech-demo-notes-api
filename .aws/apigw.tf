@@ -1,7 +1,7 @@
 locals {
   resources = {
-    folder = "/folder"
-    note   = "/note"
+    folder = "folder"
+    note   = "note"
   }
 
   folder_methods = {
