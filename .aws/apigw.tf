@@ -102,6 +102,10 @@ resource "aws_api_gateway_integration" "folder_integrations" {
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.notes_api.invoke_arn
 
+  lifecycle {
+    ignore_changes = [http_method]
+  }
+
   depends_on = [aws_api_gateway_method.folder_methods]
 }
 
@@ -114,6 +118,10 @@ resource "aws_api_gateway_integration" "note_integrations" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.notes_api.invoke_arn
+
+  lifecycle {
+    ignore_changes = [http_method]
+  }
 
   depends_on = [aws_api_gateway_method.note_methods]
 }
