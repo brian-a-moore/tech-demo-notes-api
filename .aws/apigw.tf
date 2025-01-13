@@ -50,7 +50,6 @@ locals {
 resource "aws_api_gateway_rest_api" "notes_api" {
   name        = "notes_api"
   description = "API for Notes Application"
-
 }
 
 resource "aws_api_gateway_resource" "resources" {
@@ -71,7 +70,7 @@ resource "aws_api_gateway_method" "folder_methods" {
   http_method   = each.value.method
   authorization = "NONE"
 
-  depends_on = [aws_lambda_function.notes_api]
+  depends_on = [aws_api_gateway_resource.resources]
 }
 
 resource "aws_api_gateway_method" "note_methods" {
@@ -82,7 +81,7 @@ resource "aws_api_gateway_method" "note_methods" {
   http_method   = each.value.method
   authorization = "NONE"
 
-  depends_on = [aws_lambda_function.notes_api]
+  depends_on = [aws_api_gateway_resource.resources]
 }
 
 resource "aws_api_gateway_integration" "folder_integrations" {
@@ -95,7 +94,7 @@ resource "aws_api_gateway_integration" "folder_integrations" {
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.notes_api.invoke_arn
 
-  depends_on = [aws_lambda_function.notes_api]
+  depends_on = [aws_api_gateway_method.folder_methods]
 }
 
 resource "aws_api_gateway_integration" "note_integrations" {
@@ -108,7 +107,7 @@ resource "aws_api_gateway_integration" "note_integrations" {
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.notes_api.invoke_arn
 
-  depends_on = [aws_lambda_function.notes_api]
+  depends_on = [aws_api_gateway_method.note_methods]
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
