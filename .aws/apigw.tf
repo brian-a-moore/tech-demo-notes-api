@@ -5,42 +5,42 @@ locals {
   }
 
   folder_methods = {
-    create = {
+    create_folder = {
       method = "POST"
       path   = "/"
     }
-    update = {
+    update_folder = {
       method = "PUT"
       path   = "/{folderId}"
     }
-    list = {
+    list_folder = {
       method = "GET"
       path   = "/"
     }
-    get = {
+    get_folder = {
       method = "GET"
       path   = "/{folderId}"
     }
-    delete = {
+    delete_folder = {
       method = "DELETE"
       path   = "/{folderId}"
     }
   }
 
   note_methods = {
-    create = {
+    create_note = {
       method = "POST"
       path   = "/"
     }
-    update = {
+    update_note = {
       method = "PUT"
       path   = "/{noteId}"
     }
-    get = {
+    get_note = {
       method = "GET"
       path   = "/{noteId}"
     }
-    delete = {
+    delete_note = {
       method = "DELETE"
       path   = "/{noteId}"
     }
