@@ -1,125 +1,134 @@
-resource "aws_api_gateway_rest_api" "notes_api" {
-  name        = "notes-api"
-  description = "API for Notes Application"
+locals {
+  resources = {
+    folder = "/folder"
+    note   = "/note"
+  }
+
+  folder_methods = {
+    create = {
+      method = "POST"
+      path   = "/"
+    }
+    update = {
+      method = "PUT"
+      path   = "/{folderId}"
+    }
+    list = {
+      method = "GET"
+      path   = "/"
+    }
+    get = {
+      method = "GET"
+      path   = "/{folderId}"
+    }
+    delete = {
+      method = "DELETE"
+      path   = "/{folderId}"
+    }
+  }
+
+  note_methods = {
+    create = {
+      method = "POST"
+      path   = "/"
+    }
+    update = {
+      method = "PUT"
+      path   = "/{noteId}"
+    }
+    get = {
+      method = "GET"
+      path   = "/{noteId}"
+    }
+    delete = {
+      method = "DELETE"
+      path   = "/{noteId}"
+    }
+  }
 }
 
-resource "aws_api_gateway_resource" "proxy_resource" {
+resource "aws_api_gateway_rest_api" "notes_api" {
+  name        = "notes_api"
+  description = "API for Notes Application"
+
+}
+
+resource "aws_api_gateway_resource" "resources" {
+  for_each = local.resources
+
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
   parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
-  path_part   = "{proxy+}"
+  path_part   = trim(each.value, "/")
+
+  depends_on = [aws_lambda_function.notes_api]
 }
 
-resource "aws_api_gateway_method" "proxy_method" {
+resource "aws_api_gateway_method" "folder_methods" {
+  for_each = local.folder_methods
+
   rest_api_id   = aws_api_gateway_rest_api.notes_api.id
-  resource_id   = aws_api_gateway_resource.proxy_resource.id
-  http_method   = "ANY"
+  resource_id   = aws_api_gateway_resource.resources["folder"].id
+  http_method   = each.value.method
   authorization = "NONE"
+
+  depends_on = [aws_lambda_function.notes_api]
 }
 
-resource "aws_api_gateway_integration" "proxy_integration" {
-  rest_api_id = aws_api_gateway_rest_api.notes_api.id
-  resource_id = aws_api_gateway_resource.proxy_resource.id
-  http_method = aws_api_gateway_method.proxy_method.http_method
+resource "aws_api_gateway_method" "note_methods" {
+  for_each = local.note_methods
 
+  rest_api_id   = aws_api_gateway_rest_api.notes_api.id
+  resource_id   = aws_api_gateway_resource.resources["note"].id
+  http_method   = each.value.method
+  authorization = "NONE"
+
+  depends_on = [aws_lambda_function.notes_api]
+}
+
+resource "aws_api_gateway_integration" "folder_integrations" {
+  for_each = local.folder_methods
+
+  rest_api_id             = aws_api_gateway_rest_api.notes_api.id
+  resource_id             = aws_api_gateway_resource.resources["folder"].id
+  http_method             = each.value.method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.notes_api.invoke_arn
+
+  depends_on = [aws_lambda_function.notes_api]
+}
+
+resource "aws_api_gateway_integration" "note_integrations" {
+  for_each = local.note_methods
+
+  rest_api_id             = aws_api_gateway_rest_api.notes_api.id
+  resource_id             = aws_api_gateway_resource.resources["note"].id
+  http_method             = each.value.method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.notes_api.invoke_arn
+
+  depends_on = [aws_lambda_function.notes_api]
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
 
-  depends_on = [
-    aws_api_gateway_integration.proxy_integration
-  ]
-}
-
-locals {
-  api_endpoints = {
-    folder-create = {
-      method          = "POST"
-      path            = "/folder"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
-    }
-    folder-update = {
-      method          = "PUT"
-      path            = "/folder/{folderId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
-    }
-    folder-list = {
-      method          = "GET"
-      path            = "/folder"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
-    }
-    folder-get = {
-      method          = "GET"
-      path            = "/folder/{folderId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
-    }
-    folder-delete = {
-      method          = "DELETE"
-      path            = "/folder/{folderId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
-    }
-    note-create = {
-      method          = "POST"
-      path            = "/note"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
-    }
-    note-update = {
-      method          = "PUT"
-      path            = "/note/{noteId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
-    }
-    note-get = {
-      method          = "GET"
-      path            = "/note/{noteId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
-    }
-    note-delete = {
-      method          = "DELETE"
-      path            = "/note/{noteId}"
-      integration_uri = "arn:aws:lambda:us-east-1:339713013981:function:notes_api"
-    }
+  triggers = {
+    redeploy = "${timestamp()}"
   }
-}
-
-resource "aws_api_gateway_resource" "api_resources" {
-  for_each    = local.api_endpoints
-  rest_api_id = aws_api_gateway_rest_api.notes_api.id
-  parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
-  path_part   = split("/", each.value.path)[length(split("/", each.value.path)) - 1]
-}
-
-resource "aws_api_gateway_method" "api_methods" {
-  for_each      = local.api_endpoints
-  rest_api_id   = aws_api_gateway_rest_api.notes_api.id
-  resource_id   = aws_api_gateway_resource.api_resources[each.key].id
-  http_method   = each.value.method
-  authorization = "NONE"
-}
-
-resource "aws_api_gateway_integration" "api_integrations" {
-  for_each    = local.api_endpoints
-  rest_api_id = aws_api_gateway_rest_api.notes_api.id
-  resource_id = aws_api_gateway_resource.api_resources[each.key].id
-  http_method = aws_api_gateway_method.api_methods[each.key].http_method
-
-  integration_http_method = "POST"
-  type                    = "AWS_PROXY"
-  uri                     = each.value.integration_uri
-}
-
-resource "aws_api_gateway_deployment" "api_deployment" {
-  rest_api_id = aws_api_gateway_rest_api.notes_api.id
 
   depends_on = [
-    aws_api_gateway_integration.api_integrations
+    aws_lambda_function.notes_api,
+    aws_api_gateway_method.folder_methods,
+    aws_api_gateway_method.note_methods,
+    aws_api_gateway_integration.folder_integrations,
+    aws_api_gateway_integration.note_integrations
   ]
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
   stage_name    = "prod"
   rest_api_id   = aws_api_gateway_rest_api.notes_api.id
-  deployment_id = aws_api_gateway_deployment.api_deployment.id
+  deployment_id = aws_api_gateway_deployment.deployment.id
 }
