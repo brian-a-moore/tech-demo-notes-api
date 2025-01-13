@@ -60,9 +60,17 @@ jobs:
           export TF_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           terraform -chdir=./.aws init -backend-config="bucket=notes-api-terraform" -backend-config="key=notes-api.tfstate" -backend-config="region=us-east-1"
 
-      - name: Terraform Apply
-        id: apply
+      # DO NOT RUN TERRAFORM APPLY AND DESTROY IN THE SAME WORKFLOW
+      # - name: Terraform Apply
+      #   id: apply
+      #   run: |
+      #     export TF_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     export TF_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     terraform -chdir=./.aws apply -auto-approve
+
+      # DEBUG STEP - keep it commented out
+      - name: Terraform Destroy
         run: |
           export TF_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}
           export TF_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          terraform -chdir=./.aws apply -auto-approve
+          terraform -chdir=./.aws destroy -auto-approve
