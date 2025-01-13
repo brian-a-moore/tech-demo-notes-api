@@ -57,9 +57,7 @@ resource "aws_api_gateway_resource" "resources" {
 
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
   parent_id   = aws_api_gateway_rest_api.notes_api.root_resource_id
-  path_part   = trim(each.value, "/")
-
-  depends_on = [aws_lambda_function.notes_api]
+  path_part   = each.value
 }
 
 resource "aws_api_gateway_method" "folder_methods" {
@@ -69,8 +67,6 @@ resource "aws_api_gateway_method" "folder_methods" {
   resource_id   = aws_api_gateway_resource.resources["folder"].id
   http_method   = each.value.method
   authorization = "NONE"
-
-  depends_on = [aws_api_gateway_resource.resources]
 }
 
 resource "aws_api_gateway_method" "note_methods" {
@@ -80,8 +76,6 @@ resource "aws_api_gateway_method" "note_methods" {
   resource_id   = aws_api_gateway_resource.resources["note"].id
   http_method   = each.value.method
   authorization = "NONE"
-
-  depends_on = [aws_api_gateway_resource.resources]
 }
 
 resource "aws_api_gateway_integration" "folder_integrations" {
@@ -93,8 +87,6 @@ resource "aws_api_gateway_integration" "folder_integrations" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.notes_api.invoke_arn
-
-  depends_on = [aws_api_gateway_method.folder_methods]
 }
 
 resource "aws_api_gateway_integration" "note_integrations" {
@@ -106,8 +98,6 @@ resource "aws_api_gateway_integration" "note_integrations" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.notes_api.invoke_arn
-
-  depends_on = [aws_api_gateway_method.note_methods]
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
@@ -118,7 +108,6 @@ resource "aws_api_gateway_deployment" "deployment" {
   }
 
   depends_on = [
-    aws_lambda_function.notes_api,
     aws_api_gateway_method.folder_methods,
     aws_api_gateway_method.note_methods,
     aws_api_gateway_integration.folder_integrations,
