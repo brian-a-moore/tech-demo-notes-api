@@ -186,13 +186,6 @@ resource "aws_api_gateway_deployment" "deployment" {
   triggers = {
     redeploy = "${timestamp()}"
   }
-
-  depends_on = [
-    aws_api_gateway_method.folder_methods,
-    aws_api_gateway_method.note_methods,
-    aws_api_gateway_integration.folder_integrations,
-    aws_api_gateway_integration.note_integrations
-  ]
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
