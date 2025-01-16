@@ -174,9 +174,17 @@ resource "aws_api_gateway_integration" "update_note_integration" {
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
 
-  triggers = {
-    redeploy = "${timestamp()}"
-  }
+  depends_on = [
+    aws_api_gateway_integration.create_folder_integration,
+    aws_api_gateway_integration.delete_folder_integration,
+    aws_api_gateway_integration.get_folder_integration,
+    aws_api_gateway_integration.list_folder_integration,
+    aws_api_gateway_integration.update_folder_integration,
+    aws_api_gateway_integration.create_note_integration,
+    aws_api_gateway_integration.delete_note_integration,
+    aws_api_gateway_integration.get_note_integration,
+    aws_api_gateway_integration.update_note_integration,
+  ]
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
