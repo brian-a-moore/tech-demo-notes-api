@@ -17,7 +17,7 @@ import {
 } from './functions';
 import { listFolders } from './functions/list-folders';
 
-const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+const apiHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
     const { httpMethod, path } = event;
 
@@ -67,4 +67,4 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
   }
 };
 
-export const main = middy(handler).use(jsonBodyParser()).use(httpErrorHandler()).use(cors());
+export const handler = middy(apiHandler).use(jsonBodyParser()).use(httpErrorHandler()).use(cors());
