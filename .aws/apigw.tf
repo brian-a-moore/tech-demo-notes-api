@@ -103,51 +103,6 @@ resource "aws_api_gateway_integration" "delete_folder_integration" {
   rest_api_id             = aws_api_gateway_rest_api.notes_api.id
   resource_id             = aws_api_gateway_resource.folder_id_resource.id
   http_method             = aws_api_gateway_method.delete_folder_method.http_method
-  integration_http_method = "DELETE"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.notes_api.invoke_arn
-}
-
-resource "aws_api_gateway_integration" "get_folder_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.notes_api.id
-  resource_id             = aws_api_gateway_resource.folder_id_resource.id
-  http_method             = aws_api_gateway_method.get_folder_method.http_method
-  integration_http_method = "GET"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.notes_api.invoke_arn
-}
-
-resource "aws_api_gateway_integration" "list_folder_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.notes_api.id
-  resource_id             = aws_api_gateway_resource.folder_resource.id
-  http_method             = aws_api_gateway_method.list_folder_method.http_method
-  integration_http_method = "GET"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.notes_api.invoke_arn
-}
-
-resource "aws_api_gateway_integration" "update_folder_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.notes_api.id
-  resource_id             = aws_api_gateway_resource.folder_id_resource.id
-  http_method             = aws_api_gateway_method.update_folder_method.http_method
-  integration_http_method = "PUT"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.notes_api.invoke_arn
-}
-
-resource "aws_api_gateway_integration" "create_folder_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.notes_api.id
-  resource_id             = aws_api_gateway_resource.folder_resource.id
-  http_method             = aws_api_gateway_method.create_folder_method.http_method
-  integration_http_method = "POST"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.notes_api.invoke_arn
-}
-
-resource "aws_api_gateway_integration" "delete_folder_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.notes_api.id
-  resource_id             = aws_api_gateway_resource.folder_id_resource.id
-  http_method             = aws_api_gateway_method.delete_folder_method.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.notes_api.invoke_arn
@@ -207,6 +162,14 @@ resource "aws_api_gateway_integration" "get_note_integration" {
   uri                     = aws_lambda_function.notes_api.invoke_arn
 }
 
+resource "aws_api_gateway_integration" "update_note_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.notes_api.id
+  resource_id             = aws_api_gateway_resource.note_id_resource.id
+  http_method             = aws_api_gateway_method.update_note_method.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.notes_api.invoke_arn
+}
 
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.notes_api.id
