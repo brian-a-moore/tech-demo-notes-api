@@ -25,7 +25,7 @@ paths:
                   folderId:
                     type: string
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{notes_api_arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -48,7 +48,7 @@ paths:
         '200':
           description: Successful operation
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{notes_api_arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -65,7 +65,7 @@ paths:
         '200':
           description: Successful operation
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{notes_api_arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -87,7 +87,7 @@ paths:
                     title:
                       type: string
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{folder_service_arn}/invocations
+        uri: arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/{notes_api_arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy

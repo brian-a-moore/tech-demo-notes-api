@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "notes_api" {
-  function_name    = "folder_service"
+  function_name    = "notes_api"
   role             = aws_iam_role.lambda_role.arn
   handler          = "index.handler"
   filename         = "${path.module}/../.serverless/notes-api.zip"
